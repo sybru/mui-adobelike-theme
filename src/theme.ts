@@ -77,7 +77,7 @@ export const afterEffectsTheme = createTheme({
                 root: ({ ownerState }) => {
                     return {
                         borderRadius:   "1000000px",
-                        padding:        "0 4px",
+                        padding:        "0 8px",
                         ...(ownerState.variant === "adobe-primary-contained" && {
                             color: Color.AfterEffects.text.button,
                             backgroundColor: Color.AfterEffects.skin.buttonPrimary,
@@ -153,6 +153,81 @@ export const afterEffectsTheme = createTheme({
             }
         },
 
+        MuiInputBase: {
+            styleOverrides: {
+                root: {
+                    borderStyle: "solid",
+                    borderWidth: "1px",
+                    borderColor: Color.AfterEffects.border.input,
+                    borderRadius: "4px",
+                    "& :focus": {
+                        color: Color.AfterEffects.text.inputFocused,
+                        backgroundColor: Color.AfterEffects.skin.inputFocused,
+                        borderStyle: "solid",
+                        borderWidth: "1px",
+                        borderColor: Color.AfterEffects.border.inputFocused,
+                        borderRadius: "4px",
+                    },
+                    "& :after": {
+                        borderBottom: "none"
+                    },
+                    "& .Mui-focused:after": {
+                        transform: "none"
+                    }
+                },
+                input: {
+                    color: Color.AfterEffects.text.input,
+                    backgroundColor: Color.AfterEffects.skin.input,
+                    borderRadius: "4px",
+                }
+            }
+        },
+
+        MuiInputLabel: {
+            styleOverrides: {
+                root: {
+                    "&.Mui-focused": {
+                        color: Color.AfterEffects.text.inputFocused,
+                    },
+                    color: Color.AfterEffects.text.common,
+                }
+            }
+        },
+
+        MuiInput: {
+            defaultProps: {
+                disableUnderline: true,
+            }
+        },
+        MuiOutlinedInput: {
+            styleOverrides: {
+                root: {
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                        borderWidth: 0
+                    }
+                },
+                notchedOutline: {
+                    borderWidth: 0
+                }
+            }
+        },
+        MuiFilledInput: {
+            defaultProps: {
+                disableUnderline: true,
+            }
+        },
+        MuiTextField: {
+            styleOverrides: {
+                root: ({ ownerState }) => ({
+                    ...(ownerState.variant === "standard" && {
+                        "& .MuiInputLabel-root.Mui-focused": {
+                            color: Color.AfterEffects.text.common,
+                        }
+                    })
+                })
+            }
+        },
+
         MuiCheckbox: {
             defaultProps: {
                 disableRipple: true,
@@ -225,7 +300,7 @@ export const afterEffectsTheme = createTheme({
                         backgroundColor:    Color.AfterEffects.skin.dropdown,
                         borderStyle:        "solid",
                         borderWidth:        "2px",
-                        borderColor:        Color.AfterEffects.border.dropdown,
+                        borderColor:        Color.AfterEffects.border.input,
                     },
                     "&.MuiInputBase-root .MuiOutlinedInput-notchedOutline": {
                         borderStyle: "none"
@@ -248,7 +323,7 @@ export const afterEffectsTheme = createTheme({
                         padding:            "3px 6px",
                     },
                     "& .MuiInputBase-input:hover": {
-                        borderColor: Color.AfterEffects.border.dropdown,
+                        borderColor: Color.AfterEffects.border.input,
                     },
                     "& .MuiSelect-icon": {
                         color: Color.AfterEffects.icon.dropdown,
@@ -374,6 +449,14 @@ export const afterEffectsTheme = createTheme({
                     "&:hover": {
                         boxShadow:      `0 0 0 2px ${Color.AfterEffects.skin.common}`,
                     }
+                }
+            }
+        },
+
+        MuiAppBar: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: Color.AfterEffects.skin.common
                 }
             }
         },
