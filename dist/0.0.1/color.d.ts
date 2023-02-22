@@ -8,11 +8,8 @@ export declare const Color: {
             readonly buttonCtaHover: "#E8E8E8";
             readonly buttonWarning: "#F53C3C";
             readonly toggleButtonEnable: "#161616";
-<<<<<<< HEAD
-=======
             readonly input: "#161616";
             readonly inputFocused: "#E8E8E8";
->>>>>>> develop
             readonly dropdown: "#1D1D1D";
             readonly dropdownBox: "#1D1D1D";
             readonly list: "#272727";
@@ -32,11 +29,8 @@ export declare const Color: {
             readonly buttonWarning: "#F53C3C";
             readonly buttonCta: "#E8E8E8";
             readonly buttonCtaHover: "#272727";
-<<<<<<< HEAD
-=======
             readonly input: "#A4A4A4";
             readonly inputFocused: "#323232";
->>>>>>> develop
             readonly highlight: "#278CE7";
             readonly dropdown: "#C5C5C5";
             readonly warning: "#F53C3C";
@@ -47,12 +41,8 @@ export declare const Color: {
             readonly buttonCta: "#E8E8E8";
             readonly toggleButtonEnable: "#313131";
             readonly disabled: "#575757";
-<<<<<<< HEAD
-            readonly dropdown: "#313131";
-=======
             readonly input: "#313131";
             readonly inputFocused: "#288CE7";
->>>>>>> develop
             readonly checkbox: "#8A8A8A";
             readonly sliderThumb: "#8A8A8A";
             readonly sliderThumbActive: "#288CE7";
