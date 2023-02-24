@@ -2,8 +2,8 @@
 	"name": "mui-adobelike-theme",
 	"version": "0.0.2",
 	"description": "",
-	"main": "./dist/0.0.1/index.js",
-	"types": "./dist/0.0.1/theme.d.ts",
+	"main": "./dist/0.0.2/index.js",
+	"types": "./dist/0.0.2/theme.d.ts",
 	"private": true,
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
