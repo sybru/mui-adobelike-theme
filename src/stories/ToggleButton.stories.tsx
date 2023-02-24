@@ -12,7 +12,7 @@ export default {
 
 const Template: ComponentStory<typeof ToggleButton> = (args) => (
     <Paper sx={{ padding: "8px", display: "flex", flexDirection: "column", gap: "16px"}}>
-        <ToggleButtonGroup defaultValue="c" sx={{ gap: "10px" }}>
+        <ToggleButtonGroup value="c" sx={{ gap: "10px" }}>
             <ToggleButton value="l">
                 <AccessAlarm fontSize='large' />
             </ToggleButton>

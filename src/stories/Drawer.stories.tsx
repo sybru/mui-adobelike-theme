@@ -12,9 +12,9 @@ const Template: ComponentStory<typeof Drawer> = (args) => (
     <Paper sx={{ height: "100%", padding: "8px", display: "flex", flexDirection: "column" }}>
         <Drawer anchor="left" open>
             <Button variant="adobe-primary-contained">adobe-primary</Button>
-            <Button variant="adobe-warning-contained">adobe-warning</Button>
+            <Button variant="adobe-danger-contained">adobe-danger</Button>
             <Button variant="adobe-primary-outlined">adobe-primary</Button>
-            <Button variant="adobe-warning-outlined">adobe-warning</Button>
+            <Button variant="adobe-danger-outlined">adobe-danger</Button>
             <Button variant="adobe-cta">adobe-cta</Button>
             <Button disabled>disabled</Button>
         </Drawer>
