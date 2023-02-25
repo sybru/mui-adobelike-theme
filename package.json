@@ -1,15 +1,16 @@
 {
 	"name": "mui-adobelike-theme",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "",
-	"main": "./dist/0.0.2/index.js",
-	"types": "./dist/0.0.2/theme.d.ts",
+	"main": "./dist/0.0.3/index.js",
+	"types": "./dist/0.0.3/index.d.ts",
 	"private": true,
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "ts-node scripts/build",
 		"storybook": "start-storybook -p 6006",
-		"build-storybook": "build-storybook"
+		"build-storybook": "build-storybook",
+		"matchAll": "ts-node test/matchAll"
 	},
 	"author": "sybru",
 	"license": "MIT",
