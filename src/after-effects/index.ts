@@ -339,7 +339,7 @@ const afterEffects = (params?: {
                             margin: 0,
                         },
                         "& .MuiListItemText-root span": {
-                            // ...appTheme.listItemSelectedText
+                            
                         },
                         "&:hover": {
                             ...appTheme.listItem,
@@ -355,18 +355,6 @@ const afterEffects = (params?: {
                         }
                     }
                 }
-            },
-
-            MuiListItemText: {
-                // styleOverrides: {
-                //     root: {
-                //         // ...appTheme.listItem,
-                //         margin: 0,
-                //         "& span": {
-                //             width: "fit-content",
-                //         }
-                //     }
-                // }
             },
 
             MuiMenu: {
