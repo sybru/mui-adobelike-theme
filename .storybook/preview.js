@@ -10,11 +10,17 @@ export const decorators = [
         },
         radioButtonChecked: {
           color: "green"
+        },
+        sliderThumb: {
+          color: "magenta"
+        },
+        toggleButtonIconSelected: {
+          color: "red"
         }
       }
     })
     return (
-      <ThemeProvider theme={afterEffectsTheme}>
+      <ThemeProvider theme={theme}>
       <CssBaseline />
         <Story />
       </ThemeProvider>

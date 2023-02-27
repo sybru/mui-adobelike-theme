@@ -385,7 +385,7 @@ const afterEffects = (params?: {
                         "&.Mui-selected:hover": {
                             ...appTheme.listItemSelected,
                         },
-                        "&.MuiListItemButton-divider:not(:last-child)": {
+                        "&:not(:last-child)": {
                             borderBottomColor: appTheme.divider.backgroundColor
                         }
                     }
