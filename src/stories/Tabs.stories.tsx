@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Tabs, Tab } from '@mui/material'
 import { Paper } from '@mui/material'
-import '../theme'
+import '../'
 
 export default {
     title: 'AdobeMuiTheme/Tabs',

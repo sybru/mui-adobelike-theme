@@ -3,7 +3,7 @@ import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { ToggleButtonGroup, ToggleButton } from '@mui/material'
 import { Paper } from '@mui/material'
 import { AccessAlarm, AccountTreeRounded, AirlineSeatLegroomExtraRounded } from '@mui/icons-material'
-import '../theme'
+import '../'
 
 export default {
     title: 'AdobeMuiTheme/ToggleButton',

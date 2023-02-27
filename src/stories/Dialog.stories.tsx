@@ -2,7 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Dialog, DialogContent, DialogActions, DialogContentText, DialogTitle } from '@mui/material'
 import { Paper, Button } from '@mui/material'
-import '../theme'
+import '../'
 
 export default {
     title: 'AdobeMuiTheme/Dialog',

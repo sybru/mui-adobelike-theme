@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Button, Menu, MenuItem } from '@mui/material'
 import { Paper } from '@mui/material'
-import '../theme'
+import '../'
 
 export default {
     title: 'AdobeMuiTheme/Menu',

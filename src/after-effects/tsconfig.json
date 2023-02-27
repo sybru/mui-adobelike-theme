@@ -1,9 +1,9 @@
 {
     "files": [
-        "src/theme.ts"
+        "./index.ts"
     ],
     "compilerOptions": {
-        "outDir": "./build",
+        "outDir": "../../build",
         "strict": true,
         "sourceMap": true,
         "target": "ES2015",

@@ -2,8 +2,6 @@ import fs from 'fs'
 import path from 'path'
 import { webpack, Configuration } from 'webpack'
 
-console.log(  );
-
 const packageJson = require('../package.json');
 const root = path.dirname(__dirname);
 
@@ -11,17 +9,26 @@ const buildDir  = `${root}/build`;
 const distDir   = `${root}/dist`;
 const config: Configuration = {
     mode: "production",
-    entry: `${root}/src/theme.ts`,
+    entry: {
+        "index": `${root}/src/index.ts`,
+        "after-effects/index": `${root}/src/after-effects/index.ts`
+    },
     output: {
         path: buildDir,
-        filename: "index.js",
+        filename: "[name].js",
         libraryTarget: "umd"
     },
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
-                loader: "ts-loader"
+                use: {
+                    loader: "ts-loader",
+                    options: {
+                        configFile: "tsconfig.json"
+                    }
+                }
+                
             }
         ]
     },
@@ -37,7 +44,32 @@ const config: Configuration = {
     }
 }
 
+const exists = (path: string) => fs.promises.access(path).then(() => true).catch(() => false);
+
+const getDirs = async (dir: string) => {
+    
+    const items = await fs.promises.readdir(dir, { withFileTypes: true });
+    return items.filter(item => item.isDirectory()).map(({ name }) => `${dir}/${name}`);
+}
+
+const readDirRecursive = async (dir: string) => {
+    if( !(await exists(dir)) ){ return []; }
+    const items = await fs.promises.readdir(dir, { withFileTypes: true });
+    const result: string[] = [];
+    for(const item of items){
+        const path = `${dir}/${item.name}`;
+        if(item.isFile()){ result.push(path); }
+        else if(item.isDirectory()){
+            for(const innerItem of await readDirRecursive(path)){
+                result.push(innerItem);
+            }
+        }
+    }
+    return result;
+}
+
 const removeDirRecursive = async (dir: string) => {
+    if( !(await exists(dir)) ){ return; }
     const items = await fs.promises.readdir(dir, { withFileTypes: true });
     if(items.length === 0){
         await fs.promises.rmdir(dir);
@@ -50,11 +82,37 @@ const removeDirRecursive = async (dir: string) => {
         }
         else if(item.isDirectory()){
             await removeDirRecursive(path);
-            if((await fs.promises.readdir(path)).length === 0){
-                await fs.promises.rmdir(path);
-            }
+            // if((await fs.promises.readdir(path)).length === 0){
+            //     await fs.promises.rmdir(path);
+            // }
         }
     }
+    await fs.promises.rmdir(dir);
+}
+
+const textUpperToHyphen = (text: string) => {
+    const matchAll = Array.from(text.matchAll(/[A-Z]/g));
+    return text.split("").reduce<string>((result, char, index) => {
+        if(!matchAll.some(value => value.index === index)){ return result += char; }
+        return result += `-${char.toLowerCase()}`;
+    }, "");
+}
+
+const writePackageJson = (
+    path: string,
+    { name, version, author, license }: { name: string; version: string; author: string; license: string; }
+) => {
+    return fs.promises.writeFile(
+        path,
+        JSON.stringify({
+            name,
+            version,
+            author,
+            license,
+            main: "index.js",
+            types: "index.d.ts"
+        }, null, "\t")
+    );
 }
 
 webpack(config, async (err, stats) => {
@@ -64,42 +122,49 @@ webpack(config, async (err, stats) => {
     try{
         const { name, version, author, license } = packageJson;
         const dist = `${distDir}/${version}`;
-        try{
-            await fs.promises.access(dist);
+
+        await removeDirRecursive(dist);
+
+        const appDuildDirs = await getDirs(buildDir);
+        for(const appBuildDir of appDuildDirs){
+            let appName = path.basename(appBuildDir);
+            const packageName = textUpperToHyphen(appName);
+            await writePackageJson(
+                `${appBuildDir}/package.json`,
+                {
+                    name: `@${name}/${packageName}`,
+                    version,
+                    author,
+                    license
+                }
+            );
+        }
+
+        await writePackageJson(`${buildDir}/package.json`, { name: `@${name}`, version, author, license });
+        
+        if(await exists(dist)){
             await removeDirRecursive(dist);
         }
-        catch(err){}
-        finally{
-            await fs.promises.mkdir(dist, { recursive: true });
-        }
-        const items = await fs.promises.readdir(buildDir, { withFileTypes: true });
-        for(const item of items){
-            if(item.isDirectory()){ continue; }
-            await fs.promises.rename(`${buildDir}/${item.name}`, `${dist}/${item.name}`);
-        }
+        await fs.promises.mkdir(dist, { recursive: true });
         
+        const items = await readDirRecursive(buildDir);
+        for(const item of items){
+            const name = item.replace(`${buildDir}/`, "");
+            const dest = `${dist}/${name}`;
+            const dir = path.dirname(dest);
+            await fs.promises.mkdir(dir, { recursive: true });
+            await fs.promises.rename(item, dest);
+        }
         await fs.promises.writeFile(
-            `${dist}/package.json`,
-            JSON.stringify({
-                name,
-                version,
-                author,
-                license,
-                main: "index.js",
-                types: "theme.d.ts"
-            }, null, "\t")
-        );
-        await fs.promises.writeFile(
-            path.resolve("./package.json"),
+            path.resolve('./package.json'),
             JSON.stringify({
                 ...packageJson,
                 main: `./dist/${version}/index.js`,
-                types: `./dist/${version}/theme.d.ts`
+	            types: `./dist/${version}/index.d.ts`,
             }, null, "\t")
         );
-        console.log(path.resolve("./package.json"));
         await removeDirRecursive(buildDir);
     }catch(error){
-        console.log(error);
+        console.error(error);
     }
 });

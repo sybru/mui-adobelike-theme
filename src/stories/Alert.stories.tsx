@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Alert, AlertTitle } from '@mui/material'
 import { Paper, Button } from '@mui/material'
-import '../theme'
+import '../'
 
 export default {
     title: 'AdobeMuiTheme/Alert',

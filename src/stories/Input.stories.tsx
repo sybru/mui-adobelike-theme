@@ -2,7 +2,7 @@ import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Input, TextField } from '@mui/material'
 import { Paper } from '@mui/material'
-import '../theme'
+import '../'
 
 export default {
     title: 'AdobeMuiTheme/Input',
