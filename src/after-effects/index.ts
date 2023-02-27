@@ -3,6 +3,8 @@ import { deepmerge } from "@mui/utils"
 import { createTheme } from '@mui/material/styles'
 import { afterEffectsAppColor, afterEffectsElementColor } from './color'
 
+export { afterEffectsAppColor, afterEffectsElementColor }
+
 declare module '@mui/material/Button' {
     interface ButtonPropsVariantOverrides {
         "adobe-primary-contained":  true;
@@ -13,9 +15,6 @@ declare module '@mui/material/Button' {
         "adobe-inherit":            true;
     }
 }
-
-export { afterEffectsAppColor }
-export { afterEffectsElementColor }
 
 const afterEffects = (params?: {
     appColor?: typeof afterEffectsAppColor;
