@@ -1,0 +1,8 @@
+{
+	"name": "@mui-adobelike-theme/after-effects",
+	"version": "0.0.3",
+	"author": "sybru",
+	"license": "MIT",
+	"main": "index.js",
+	"types": "index.d.ts"
+}
