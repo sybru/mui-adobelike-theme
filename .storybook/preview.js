@@ -1,5 +1,5 @@
 import { ThemeProvider, CssBaseline } from '@mui/material'
-import { afterEffectsTheme, useAfterEffectsTheme } from '../src'
+import { afterEffectsTheme, useAfterEffectsTheme } from '../'
 
 export const decorators = [
   (Story) => {
