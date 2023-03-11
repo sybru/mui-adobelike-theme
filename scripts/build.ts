@@ -40,7 +40,10 @@ const config: Configuration = {
 
     externals: {
         "react": "react",
-        "createTheme": "@mui/material/styles"
+        "createTheme": "@mui/material/styles/createTheme",
+        "PaletteColor": "@mui/material/styles",
+        "CSSObject": "@mui/styled-engine",
+        "deepmerge": "@mui/utils/deepmerge"
     }
 }
 

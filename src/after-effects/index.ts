@@ -1,8 +1,6 @@
 import { useMemo } from 'react'
-import { amber } from '@mui/material/colors'
 import createTheme from '@mui/material/styles/createTheme'
-import { PaletteColor, PaletteOptions } from '@mui/material/styles'
-import { CSSObject } from '@mui/styled-engine'
+import { PaletteColor } from '@mui/material/styles'
 import { afterEffectsElementTheme } from './theme'
 export type { AfterEffectsAppTheme, AfterEffectsElementTheme } from './theme'
 export { afterEffectsElementTheme }
