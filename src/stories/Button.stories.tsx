@@ -11,15 +11,19 @@ export default {
 
 const Template: ComponentStory<typeof Button> = (args) => (
     <Paper sx={{ padding: "8px", display: "flex", flexDirection: "column", gap: "16px"}}>
-        <Button variant="adobe-primary-contained">adobe-primary-contained</Button>
-        <Button variant="adobe-danger-contained">adobe-danger-contained</Button>
-        <Button variant="adobe-primary-outlined">adobe-primary-outlined</Button>
-        <Button variant="adobe-danger-outlined">adobe-danger-outlined</Button>
+        <Button variant="contained" color="adobe-primary">adobe-primary-contained</Button>
+        <Button variant="contained" color="adobe-danger">adobe-danger-contained</Button>
+        <Button variant="outlined" color="adobe-primary">adobe-primary-outlined</Button>
+        <Button variant="outlined" color="adobe-danger">adobe-danger-outlined</Button>
+        <Button variant="text" color="adobe-primary">adobe-primary-text</Button>
+        <Button variant="text" color="adobe-danger">adobe-danger-text</Button>
         <Button variant="adobe-cta">adobe-cta</Button>
-        <Button variant="adobe-primary-contained" disabled>adobe-primary-contained</Button>
-        <Button variant="adobe-danger-contained" disabled>adobe-danger-contained</Button>
-        <Button variant="adobe-primary-outlined" disabled>adobe-primary-outlined</Button>
-        <Button variant="adobe-danger-outlined" disabled>adobe-danger-outlined</Button>
+        <Button variant="contained" color="adobe-primary" disabled>adobe-primary-contained</Button>
+        <Button variant="contained" color="adobe-danger" disabled>adobe-danger-contained</Button>
+        <Button variant="outlined" color="adobe-primary" disabled>adobe-primary-outlined</Button>
+        <Button variant="outlined" color="adobe-danger" disabled>adobe-danger-outlined</Button>
+        <Button variant="text" color="adobe-primary" disabled>adobe-primary-outlined</Button>
+        <Button variant="text" color="adobe-danger" disabled>adobe-danger-outlined</Button>
         <Button variant="adobe-cta" disabled>adobe-cta</Button>
     </Paper>
     

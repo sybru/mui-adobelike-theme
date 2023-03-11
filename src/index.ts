@@ -1,1 +1,1 @@
-export { afterEffectsAppColor, afterEffectsElementColor, afterEffectsTheme, useAfterEffectsTheme } from './after-effects'
+export { afterEffectsTheme, useAfterEffectsTheme } from './after-effects'

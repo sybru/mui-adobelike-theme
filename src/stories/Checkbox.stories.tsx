@@ -1,7 +1,7 @@
 import React from 'react';
 import { ComponentStory, ComponentMeta } from '@storybook/react';
 import { Checkbox } from '@mui/material'
-import { Paper } from '@mui/material'
+import { Paper, FormGroup, FormControl, FormLabel } from '@mui/material'
 
 export default {
     title: 'AdobeMuiTheme/Checkbox',
@@ -13,6 +13,11 @@ const Template: ComponentStory<typeof Checkbox> = (args) => (
         <Checkbox />
         <Checkbox disabled />
         <Checkbox checked disabled />
+        <FormGroup row>
+            <FormLabel>Checkbox</FormLabel>
+            <Checkbox />
+        </FormGroup>
+        
     </Paper>
     
 )

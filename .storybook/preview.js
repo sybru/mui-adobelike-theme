@@ -4,18 +4,11 @@ import { afterEffectsTheme, useAfterEffectsTheme } from '../src'
 export const decorators = [
   (Story) => {
     const theme = useAfterEffectsTheme({
-      elementColor: {
-        checkbox: {
-          color: "red"
-        },
-        radioButtonChecked: {
-          color: "green"
-        },
-        sliderThumb: {
-          color: "magenta"
-        },
-        toggleButtonIconSelected: {
-          color: "red"
+      elementTheme: {
+        formLabel: {
+          display: 'inline-flex',
+          alignItems: "center",
+          width: "320px"
         }
       }
     })
