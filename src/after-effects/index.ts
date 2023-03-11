@@ -1,78 +1,224 @@
 import { useMemo } from 'react'
-import { deepmerge } from "@mui/utils"
-import { createTheme } from '@mui/material/styles'
-import { afterEffectsAppColor, afterEffectsElementColor } from './color'
+import { amber } from '@mui/material/colors'
+import createTheme from '@mui/material/styles/createTheme'
+import { PaletteColor, PaletteOptions } from '@mui/material/styles'
+import { CSSObject } from '@mui/styled-engine'
+import { afterEffectsElementTheme } from './theme'
+export type { AfterEffectsAppTheme, AfterEffectsElementTheme } from './theme'
+export { afterEffectsElementTheme }
 
-export { afterEffectsAppColor, afterEffectsElementColor }
-
-declare module '@mui/material/Button' {
-    interface ButtonPropsVariantOverrides {
-        "adobe-primary-contained":  true;
-        "adobe-danger-contained":   true;
-        "adobe-primary-outlined":   true;
-        "adobe-danger-outlined":    true;
-        "adobe-cta":                true;
-        "adobe-inherit":            true;
+declare module "@mui/material/styles" {
+    interface Palette {
+        "adobe-primary"?: PaletteColor;
+        "adobe-danger"?: PaletteColor;
+    }
+    interface PaletteOptions {
+        "adobe-primary"?: PaletteColor;
+        "adobe-danger"?: PaletteColor;
     }
 }
 
-const afterEffects = (params?: {
-    appColor?: typeof afterEffectsAppColor;
-    elementColor?: ReturnType<typeof afterEffectsElementColor>
-}) => {
-    const elementColor = afterEffectsElementColor(params?.appColor);
-    const appTheme = deepmerge(elementColor, params?.elementColor);
+declare module '@mui/material/Button' {
+    interface ButtonPropsVariantOverrides {
+        "adobe-cta": true;
+    }
+    interface ButtonPropsColorOverrides {
+        "adobe-primary":    true;
+        "adobe-danger":     true;
+    }
+}
 
+declare module '@mui/material/Chip' {
+    interface ChipPropsVariantOverrides {
+        "adobe-cta": true;
+    }
+    interface ChipPropsColorOverrides {
+        "adobe-primary":    true;
+        "adobe-danger":     true;
+    }
+}
+
+const afterEffects = (...[params]: Parameters<typeof afterEffectsElementTheme>): ReturnType<typeof createTheme> => {
+    const { appTheme, elementTheme } = afterEffectsElementTheme(params);
+    const { palette } = createTheme();
     return createTheme({
+        palette: {
+            "adobe-primary": palette.augmentColor({
+                color: {
+                    main: appTheme?.common?.primary as string,
+                }
+            }),
+            "adobe-danger": palette.augmentColor({
+                color: {
+                    main: appTheme?.common?.danger as string
+                }
+            })
+        },
         typography: {
             allVariants: {
                 fontSize: "0.85rem"
             }
         },
         components: {
-            MuiPaper: {
-                defaultProps: {
-                    elevation: 0
-                },
+            MuiAccordion: {
                 styleOverrides: {
                     root: {
-                        ...appTheme.surface,
+                        "&.Mui-expanded": {
+                            margin: 0,
+                        },
+                        "&:before": {
+                            backgroundColor: "transparent"
+                        },
+                        "& .MuiCollapse-root": {
+                            transition: "none"
+                        }
+                    },
+                }
+            },
+            MuiAccordionSummary: {
+                styleOverrides: {
+                    root: {
+                        ...elementTheme.accordionSummary,
+                        "&.Mui-expanded": {
+                            ...elementTheme.accordionSummaryExpanded
+                        }
+                    },
+                    content: {
+                        margin: 0,
+                        "&.Mui-expanded": {
+                            margin: 0,
+                        }
+                    },
+                    expandIconWrapper: {
+                        ...elementTheme.accordionIcon,
+                        "&.Mui-expanded": {
+                            ...elementTheme.accordionIconExpanded,
+                            // transform: "rotate(90deg)",
+                        },
+                        "& .MuiSvgIcon-root": {
+                            fontSize: "inherit"
+                        }
                     }
                 }
             },
-
-            MuiDivider: {
+            MuiAccordionDetails: {
                 styleOverrides: {
-
+                    root: {
+                        padding: "4px 25px"
+                    },
                 }
             },
+            MuiAppBar: {
+                styleOverrides: {
+                    root: {
+                        ...elementTheme.paper
+                    }
+                }
+            },
+            MuiAlert: {
+                styleOverrides: {
+                    standard: {
+                        ...elementTheme.paper
+                    },
+                    standardSuccess: {
+                        ...elementTheme.alertSuccess
+                    },
+                    standardError: {
+                        ...elementTheme.alertError
+                    },
+                    outlined: {
+                        ...elementTheme.alertInfoOutlined
+                    },
+                    outlinedSuccess: {
+                        ...elementTheme.alertSuccessOutlined
+                    },
+                    outlinedError: {
+                        ...elementTheme.alertErrorOutlined
+                    },
+                    filled: {
+                        ...elementTheme.alertInfoFilled
+                    },
+                    filledSuccess: {
+                        ...elementTheme.alertSuccessFilled
+                    },
+                    filledError: {
+                        ...elementTheme.alertErrorFilled
+                    },
+                    icon: ({ ownerState }) => ({
+                        "& .MuiSvgIcon-root": {
+                            ...(ownerState.severity === "info" && {
+                                ...(ownerState.variant === "standard" && {
+                                    color: elementTheme.alertInfo?.color
+                                }),
+                                ...(ownerState.variant === "filled" && {
+                                    color: elementTheme.alertInfoFilled?.color
+                                }),
+                                ...(ownerState.variant === "outlined" && {
+                                    color: elementTheme.alertInfoOutlined?.color
+                                })
+                            }),
+                            ...(ownerState.severity === "success" && {
+                                ...(ownerState.variant === "standard" && {
+                                    color: elementTheme.alertSuccess?.color
+                                }),
+                                ...(ownerState.variant === "filled" && {
+                                    color: elementTheme.alertSuccessFilled?.color
+                                }),
+                                ...(ownerState.variant === "outlined" && {
+                                    color: elementTheme.alertSuccessOutlined?.color
+                                })
+                            }),
+                            ...(ownerState.severity === "error" && {
+                                ...(ownerState.variant === "standard" && {
+                                    color: elementTheme.alertError?.color
+                                }),
+                                ...(ownerState.variant === "filled" && {
+                                    color: elementTheme.alertErrorFilled?.color
+                                }),
+                                ...(ownerState.variant === "outlined" && {
+                                    color: elementTheme.alertErrorOutlined?.color
+                                })
+                            })
+                        }
+                        
+                    })
+                }
+            },
+            MuiAlertTitle: {
 
+            },
+            MuiBreadcrumbs: {
+                styleOverrides: {
+                    root: {
+                        "& li > button": {
+                            ...elementTheme.breadcrumbsCollapse
+                        },
+                        "& li > button:hover": {
+                            ...elementTheme.breadcrumbsCollapseHover
+                        }
+                    },
+                    separator: {
+                        ...elementTheme.breadcrumbsSeparator,
+                        "&:hover": {
+                            ...elementTheme.breadcrumbsSeparatorHover,
+                        }
+                    }
+                }
+            },
             MuiButton: {
                 variants: [
                     {
-                        props: { variant: "adobe-primary-contained" },
+                        props: { color: "adobe-primary" },
                         style: {}
                     },
                     {
-                        props: { variant: "adobe-danger-contained" },
-                        style: {}
-                    },
-                    {
-                        props: { variant: "adobe-primary-outlined" },
-                        style: {}
-                    },
-                    {
-                        props: { variant: "adobe-danger-outlined" },
+                        props: { color: "adobe-danger" },
                         style: {}
                     },
                     {
                         props: { variant: "adobe-cta" },
                         style: {}
-                    },
-                    {
-                        props: { variant: "adobe-inherit" },
-                        style: {}
-                    },
+                    }
                 ],
                 defaultProps: {
                     variant: "contained",
@@ -85,54 +231,66 @@ const afterEffects = (params?: {
                     root: ({ ownerState }) => ({
                         borderRadius:   "1000000px",
                         padding:        "0 12px",
-                        ...(ownerState.variant === "adobe-primary-contained" && {
-                            ...appTheme.buttonPrimaryContained,
-                            "&:hover": {
-                                ...appTheme.buttonPrimaryContained
-                            }
-                        }),
-                        ...(ownerState.variant === "adobe-danger-contained" && {
-                            ...appTheme.buttonDangerContained,
-                            "&:hover": {
-                                ...appTheme.buttonDangerContained
-                            }
-                        }),
-                        ...(ownerState.variant === "adobe-primary-outlined" && {
-                            ...appTheme.buttonPrimaryOutlined,
-                            borderStyle: "solid",
-                            borderWidth: "1px",
-                        }),
-                        ...(ownerState.variant === "adobe-danger-outlined" && {
-                            ...appTheme.buttonDangerOutlined,
-                            borderStyle: "solid",
-                            borderWidth: "1px",
-                        }),
                         ...(ownerState.variant === "adobe-cta" && {
-                            ...appTheme.buttonCta,
-                            borderStyle: "solid",
-                            borderWidth: "1px",
-                            transition: "none",
+                            ...elementTheme.buttonCta,
                             "&:hover": {
-                                ...appTheme.buttonCtaHover,
+                                ...elementTheme.buttonCtaHover,
                             }
                         }),
-                        ...(ownerState.variant === "adobe-inherit" && {
-                            color: "inherit",
-                            backgroundColor: "inherit",
-                            borderColor: "inherit",
+                        ...(ownerState.variant === "contained" && {
+                            ...(ownerState.color === "adobe-primary" && {
+                                ...elementTheme.buttonPrimaryContained,
+                                "&:hover": {
+                                    ...elementTheme.buttonPrimaryContained
+                                }
+                            }),
+                            ...(ownerState.color === "adobe-danger" && {
+                                ...elementTheme.buttonDangerContained,
+                                "&:hover": {
+                                    ...elementTheme.buttonDangerContained
+                                }
+                            })
+                        }),
+                        ...(ownerState.variant === "outlined" && {
                             borderStyle: "solid",
                             borderWidth: "1px",
+
+                            ...(ownerState.color === "adobe-primary" && {
+                                ...elementTheme.buttonPrimaryOutlined,
+                                "&:hover": {
+                                    ...elementTheme.buttonPrimaryOutlined,
+                                }
+                            }),
+                            ...(ownerState.color === "adobe-danger" && {
+                                ...elementTheme.buttonDangerOutlined,
+                                "&:hover": {
+                                    ...elementTheme.buttonDangerOutlined,
+                                }
+                            })
+                        }),
+                        ...(ownerState.variant === "text" && {
+                            ...(ownerState.color === "adobe-primary" && {
+                                ...elementTheme.buttonPrimary,
+                                "&:hover": {
+                                    ...elementTheme.buttonPrimary,
+                                }
+                            }),
+                            ...(ownerState.color === "adobe-danger" && {
+                                ...elementTheme.buttonDanger,
+                                "&:hover": {
+                                    ...elementTheme.buttonDanger,
+                                }
+                            })
                         }),
                         "&.Mui-disabled": {
-                            ...appTheme.buttonDisabled,
+                            ...elementTheme.buttonDisabled,
                             borderStyle: "solid",
                             borderWidth: "1px",
                         }
-                    })
+                    }),
                 }
             },
-
-            MuiToggleButton: {
+            MuiCheckbox: {
                 defaultProps: {
                     disableRipple: true,
                     disableFocusRipple: true,
@@ -140,20 +298,168 @@ const afterEffects = (params?: {
                 },
                 styleOverrides: {
                     root: {
-                        padding: "3px",
-                        borderColor: "transparent",
-                        "&.Mui-selected": {
-                            ...appTheme.toggleButtonSelected,
-                            borderStyle: "solid",
-                            borderWidth: "1px",
+                        padding: 0,
+                        "& .MuiSvgIcon-root": {
+                            ...elementTheme.checkbox,
                         },
-                        "&.Mui-selected .MuiSvgIcon-root": {
-                            ...appTheme.toggleButtonIconSelected
+                        "&:hover .MuiSvgIcon-root": {
+                            ...elementTheme.checkboxHover,
+                        },
+                        "&.Mui-checked:hover .MuiSvgIcon-root": {
+                            ...elementTheme.checkboxHover,
+                        },
+                        "&.Mui-disabled .MuiSvgIcon-root": {
+                            ...elementTheme.checkboxDisabled,
                         }
                     }
                 }
             },
+            MuiChip: {
+                variants: [
+                    {
+                        props: { color: "adobe-primary" },
+                        style: {}
+                    },
+                    {
+                        props: { color: "adobe-danger" },
+                        style: {}
+                    },
+                    {
+                        props: { variant: "adobe-cta" },
+                        style: {}
+                    }
+                ],
+                styleOverrides: {
+                    root: ({ ownerState }) => ({
+                        ...elementTheme.chipFilled,
+                        "& .MuiChip-deleteIcon": {
+                            color: appTheme.text?.light
+                        },
+                        "& .MuiChip-deleteIcon:hover": {
+                            color: appTheme.text?.light
+                        },
+                        ...(ownerState.variant === "adobe-cta" && {
+                            ...elementTheme.chipCta,
+                            "&:hover": {
+                                ...elementTheme.chipCtaHover,
+                            },
+                            "&:hover .MuiChip-deleteIcon": {
+                                color: elementTheme.chipCtaHover?.color
+                            },
+                            "&:hover .MuiChip-deleteIcon:hover": {
+                                color: elementTheme.chipCtaHover?.color
+                            },
+                        })
+                    }),
+                    filled: ({ ownerState }) => ({
+                        ...elementTheme.chipFilled,
+                        "& .MuiChip-deleteIcon": {
+                            color: appTheme.text?.light
+                        },
+                        "& .MuiChip-deleteIcon:hover": {
+                            color: appTheme.text?.light
+                        },
+                        ...(ownerState.color === "adobe-primary" && {
+                            ...elementTheme.chipPrimaryFilled,
+                        }),
+                        ...(ownerState.color === "adobe-danger" && {
+                            ...elementTheme.chipDangerFilled,
+                        })
+                    }),
+                    outlined: ({ ownerState }) => ({
+                        ...elementTheme.chipOutlined,
+                        "& .MuiChip-deleteIcon": {
+                            color: appTheme.text?.light
+                        },
+                        "& .MuiChip-deleteIcon:hover": {
+                            color: appTheme.text?.light
+                        },
+                        ...(ownerState.color === "adobe-primary" && {
+                            ...elementTheme.chipPrimaryOutlined,
+                        }),
+                        ...(ownerState.color === "adobe-danger" && {
+                            ...elementTheme.chipDangerOutlined,
+                        }),
 
+                    }),
+                }
+            },
+            MuiDialog: {
+                styleOverrides: {
+                    root: {
+                        ...elementTheme.dialogBackdrop
+                    },
+                    paper: {
+                        ...elementTheme.dialog
+                    },
+                }
+            },       
+            MuiDialogContent: {
+                styleOverrides: {
+                    root: ({ ownerState }) => ({
+                        ...elementTheme.dialogContent,
+                        ...(ownerState.dividers && {
+                            borderTopColor: elementTheme.divider?.backgroundColor,
+                            borderBottomColor: elementTheme.divider?.backgroundColor
+                        })
+                    })
+                }
+            },
+            MuiDialogContentText: {
+                styleOverrides: {
+                    root: {
+                        ...elementTheme.dialogContentText
+                    }
+                }
+            },
+            MuiDialogActions: {
+                styleOverrides: {
+                    root: {
+                        ...elementTheme.dialogActions
+                    }
+                }
+            },
+            MuiDivider: {
+                styleOverrides: {
+                    root: {
+                        ...elementTheme.divider,
+                    }
+                }
+            },
+            MuiDrawer: {
+                styleOverrides: {
+                    paper: {
+                        padding:    "8px",
+                        gap:        "16px",
+                        ...elementTheme.drawer,
+                    }
+                }
+            },
+            MuiFilledInput: {
+                defaultProps: {
+                    disableUnderline: true,
+                }
+            },
+            MuiFormGroup: {
+                styleOverrides: {
+                    root: {
+                        ...elementTheme.formGroup
+                    }
+                }
+            },
+            MuiFormLabel: {
+                styleOverrides: {
+                    root: {
+                        ...elementTheme.formLabel,
+                        "&.Mui-focused": {
+                            ...elementTheme.formLabelFocused,
+                        },
+                        "&.Mui-disabled": {
+                            ...elementTheme.formLabelDisabled,
+                        }
+                    }
+                }
+            },
             MuiInputBase: {
                 styleOverrides: {
                     root: {
@@ -165,20 +471,20 @@ const afterEffects = (params?: {
                         }
                     },
                     input: ({ ownerState }) => ({
-                        ...appTheme.textField,
+                        ...elementTheme.textField,
                         padding: "3px 8px",
                         borderStyle: "solid",
                         borderWidth: "1px",
                         borderRadius: "4px",
                         "&:focus": {
-                            ...appTheme.textFieldFocused,
+                            ...elementTheme.textFieldFocused,
                             ...(ownerState.readOnly && {
-                                ...appTheme.textField,
+                                ...elementTheme.textField,
                             }),
                         },
                         "&.Mui-disabled": {
-                            ...appTheme.textFieldDisabled,
-                            WebkitTextFillColor: appTheme.textFieldDisabled.color
+                            ...elementTheme.textFieldDisabled,
+                            WebkitTextFillColor: elementTheme.textFieldDisabled?.color
                         },
                     })
                 }
@@ -188,26 +494,120 @@ const afterEffects = (params?: {
                     disableUnderline: true,
                 }
             },
-            MuiTextField: {
+            MuiIconButton: {
                 styleOverrides: {
-                    root: ({ ownerState }) => ({
-                        "& .MuiInputLabel-root": {
-                            ...appTheme.textFieldLabel
+                    root: {
+                        ...elementTheme.iconButton
+                    }
+                }
+            },
+            MuiLink: {
+                styleOverrides: {
+                    root: {
+                        cursor: "pointer",
+                        ...elementTheme.link
+                    }
+                }
+            },
+            MuiList: {
+                styleOverrides: {
+                    root: {
+                        padding: 0,
+                        ...elementTheme.list
+                        // backgroundColor: theme.list?.backgroundColor
+                    }
+                }
+            },
+            MuiListItem: {
+                defaultProps: {
+                    divider: true,
+                },
+                styleOverrides: {
+                    root: {
+                        padding: "3px 12px",
+                        ...elementTheme.listItem,
+                        "&:hover": {
+                            ...elementTheme.listItemHover,
                         },
-                        "& .MuiInputLabel-root.Mui-focused": {
-                            ...(!ownerState.InputProps?.readOnly && {
-                                ...appTheme.textFieldLabelFocused
-                            })
+                        "&.Mui-selected": {
+                            ...elementTheme.listItemSelected,
                         },
-                        "& .MuiInputLabel-root.Mui-disabled": {
-                            ...appTheme.textFieldLabelDisabled
+                        "&.Mui-selected:hover": {
+                            ...elementTheme.listItemSelected,
                         },
-                        ...(ownerState.variant === "standard" && {
-                            "& .MuiInputLabel-root.Mui-focused": {
-                                ...appTheme.textFieldLabel
-                            }
-                        })
-                    })
+                        "&.MuiListItemButton-divider:not(:last-child)": {
+                            ...elementTheme.divider
+                            // borderBottomColor: theme.divider?.backgroundColor
+                        }
+                    }
+                }
+            },
+            MuiListItemButton: {
+                defaultProps: {
+                    disableRipple: true,
+                    disableTouchRipple: true,
+                    divider: true
+                },
+                styleOverrides: {
+                    root: {
+                        padding: "3px 12px",
+                        ...elementTheme.listItem,
+                        transition: "none",
+                        "& .MuiListItemText-root": {
+                            margin: 0,
+                        },
+                        "& .MuiListItemText-root span": {
+                            
+                        },
+                        "&:hover": {
+                            ...elementTheme.listItemHover,
+                        },
+                        "&.Mui-selected": {
+                            ...elementTheme.listItemSelected,
+                        },
+                        "&.Mui-selected:hover": {
+                            ...elementTheme.listItemSelected,
+                        },
+                        "&.MuiListItemButton-divider:not(:last-child)": {
+                            borderBottomColor: elementTheme.divider?.backgroundColor
+                        }
+                    }
+                }
+            },
+            MuiMenu: {
+                styleOverrides: {
+                    paper: {
+                        ...elementTheme.menu
+                    }
+                }
+            },
+            MuiMenuItem: {
+                defaultProps: {
+                    disableRipple: true,
+                    disableTouchRipple: true,
+                    divider: true
+                },
+                styleOverrides: {
+                    root: {
+                        minHeight: 0,
+                        padding: "3px 24px",
+                        ...elementTheme.listItem,
+                        "&:hover": {
+                            ...elementTheme.menuItemHover,
+                        },
+                        "&.Mui-selected": {
+                            ...elementTheme.menuItemSelected,
+                        },
+                        "&.Mui-selected.Mui-focusVisible": {
+                            ...elementTheme.menuItemSelected,
+                        },
+                        "&.Mui-selected:hover": {
+                            ...elementTheme.menuItemSelected,
+                        },
+                        "&:not(:last-child)": {
+                            borderBottomColor: elementTheme.divider?.backgroundColor
+                        }
+                    },
                 }
             },
             MuiOutlinedInput: {
@@ -222,33 +622,13 @@ const afterEffects = (params?: {
                     }
                 }
             },
-            MuiFilledInput: {
+            MuiPaper: {
                 defaultProps: {
-                    disableUnderline: true,
-                }
-            },
-
-            MuiCheckbox: {
-                defaultProps: {
-                    disableRipple: true,
-                    disableFocusRipple: true,
-                    disableTouchRipple: true,
+                    elevation: 0
                 },
                 styleOverrides: {
                     root: {
-                        padding: 0,
-                        "& .MuiSvgIcon-root": {
-                            ...appTheme.checkbox,
-                        },
-                        "&:hover .MuiSvgIcon-root": {
-                            ...appTheme.checkboxHover,
-                        },
-                        "&.Mui-checked:hover .MuiSvgIcon-root": {
-                            ...appTheme.checkboxHover,
-                        },
-                        "&.Mui-disabled .MuiSvgIcon-root": {
-                            ...appTheme.checkboxDisabled,
-                        }
+                        ...elementTheme.paper,
                     }
                 }
             },
@@ -268,7 +648,7 @@ const afterEffects = (params?: {
                             borderStyle: "solid",
                             borderWidth: "2px",
                             borderRadius: "50%",
-                            borderColor: appTheme.radioButton.color,
+                            borderColor: elementTheme.radioButton?.color,
                         }
                         return {
                             padding: "2px",
@@ -278,145 +658,46 @@ const afterEffects = (params?: {
                             "&:after": after,
                             "&:hover:after": {
                                 ...after,
-                                borderColor: appTheme.radioButtonHover.color,
+                                borderColor: elementTheme.radioButtonHover?.color,
                             },
                             "&.Mui-checked:after": {
                                 ...after,
-                                backgroundColor: appTheme.radioButtonChecked.color,
-                                borderColor: appTheme.radioButtonChecked.color,
+                                backgroundColor: elementTheme.radioButtonChecked?.color,
+                                borderColor: elementTheme.radioButtonChecked?.color,
                             }
                         }
                     }
                 }
             },
-
-            MuiList: {
-                styleOverrides: {
-                    root: {
-                        padding: 0,
-                        backgroundColor: appTheme.list.backgroundColor
-                    }
-                }
-            },
-
-            MuiListItem: {
-                defaultProps: {
-                    divider: true,
-                },
-                styleOverrides: {
-                    root: {
-                        padding: "3px 12px",
-                        ...appTheme.listItem,
-                        "&:hover": {
-                            ...appTheme.listItem,
-                        },
-                        "&.Mui-selected": {
-                            ...appTheme.listItemSelected,
-                        },
-                        "&.Mui-selected:hover": {
-                            ...appTheme.listItemSelected,
-                        },
-                        "&.MuiListItemButton-divider:not(:last-child)": {
-                            borderBottomColor: appTheme.divider.backgroundColor
-                        }
-                    }
-                }
-            },
-
-            MuiListItemButton: {
-                defaultProps: {
-                    disableRipple: true,
-                    disableTouchRipple: true,
-                    divider: true
-                },
-                styleOverrides: {
-                    root: {
-                        ...appTheme.listItem,
-                        padding: "3px 12px",
-                        transition: "none",
-                        "& .MuiListItemText-root": {
-                            margin: 0,
-                        },
-                        "& .MuiListItemText-root span": {
-                            
-                        },
-                        "&:hover": {
-                            ...appTheme.listItem,
-                        },
-                        "&.Mui-selected": {
-                            ...appTheme.listItemSelected,
-                        },
-                        "&.Mui-selected:hover": {
-                            ...appTheme.listItemSelected,
-                        },
-                        "&.MuiListItemButton-divider:not(:last-child)": {
-                            borderBottomColor: appTheme.divider.backgroundColor
-                        }
-                    }
-                }
-            },
-
-            MuiMenu: {
-                styleOverrides: {
-                    paper: {
-                        backgroundColor: appTheme.menu.backgroundColor,
-                    }
-                }
-            },
-
-            MuiMenuItem: {
-                defaultProps: {
-                    disableRipple: true,
-                    disableTouchRipple: true,
-                    divider: true
-                },
-                styleOverrides: {
-                    root: {
-                        minHeight: 0,
-                        padding: "3px 24px",
-                        ...appTheme.listItem,
-                        "&:hover": {
-                            ...appTheme.listItem,
-                        },
-                        "&.Mui-selected": {
-                            ...appTheme.listItemSelected,
-                        },
-                        "&.Mui-selected:hover": {
-                            ...appTheme.listItemSelected,
-                        },
-                        "&:not(:last-child)": {
-                            borderBottomColor: appTheme.divider.backgroundColor
-                        }
-                    }
-                }
-            },
-
             MuiSelect: {
                 styleOverrides: {
                     select: {
                         "&.MuiInput-input:focus": {
-                            color: appTheme.select.color,
-                            backgroundColor: appTheme.select.backgroundColor
+                            // color: theme.select?.color,
+                            // backgroundColor: theme.select?.backgroundColor
+                            ...elementTheme.select
                         },
                         "&.MuiOutlinedInput-input:focus": {
-                            color: appTheme.select.color,
-                            backgroundColor: appTheme.select.backgroundColor
+                            // color: theme.select?.color,
+                            // backgroundColor: theme.select?.backgroundColor
+                            ...elementTheme.select
                         },
                         "&.MuiFilledInput-input:focus": {
-                            color: appTheme.select.color,
-                            backgroundColor: appTheme.select.backgroundColor
+                            // color: theme.select?.color,
+                            // backgroundColor: theme.select?.backgroundColor
+                            ...elementTheme.select
                         }
                     },
                     icon: {
-                        color: appTheme.select.color
+                        ...elementTheme.select,
+                        // color: theme.select?.color
                     }
                 }
             },
-
             MuiSlider: {
                 styleOverrides: {
                     root: {
-                        ...appTheme.sliderRail,
+                        ...elementTheme.sliderRail,
                     },
                     rail: {
                         opacity: 1,
@@ -425,102 +706,35 @@ const afterEffects = (params?: {
                         display: "none"
                     },
                     thumb: {
-                        ...appTheme.sliderThumb,
                         width:  "17px",
                         height: "17px",
                         borderStyle:    "solid",
                         borderWidth:    "2px",
-                        boxShadow:      `0 0 0 2px ${appTheme.sliderThumb.color}`,
+                        boxShadow:      `0 0 0 2px ${elementTheme.sliderThumb?.color}`,
+                        ...elementTheme.sliderThumb,
                         "&.Mui-active": {
-                            ...appTheme.sliderThumbActive,
-                            boxShadow:      `0 0 0 2px ${appTheme.sliderThumb.color}`,
+                            boxShadow:      `0 0 0 2px ${elementTheme.sliderThumb?.color}`,
+                            ...elementTheme.sliderThumbActive,
                         },
                         "&.Mui-focusVisible": {
-                            boxShadow:      `0 0 0 2px ${appTheme.sliderThumb.color}`,
+                            boxShadow:      `0 0 0 2px ${elementTheme.sliderThumb?.color}`,
                         },
                         "&:before": {
                             boxShadow:      "none",
                         },
                         "&:hover": {
-                            boxShadow:      `0 0 0 2px ${appTheme.sliderThumb.color}`,
+                            boxShadow:      `0 0 0 2px ${elementTheme.sliderThumb?.color}`,
                         }
                     }
                 }
             },
-
-            MuiAppBar: {
+            MuiSvgIcon: {
                 styleOverrides: {
                     root: {
-                        ...appTheme.surface
+                        ...elementTheme?.icon
                     }
                 }
-            },
-
-            MuiAccordion: {
-                styleOverrides: {
-                    root: {
-                        "&.Mui-expanded": {
-                            margin: 0,
-                        },
-                        "&:before": {
-                            backgroundColor: "transparent"
-                        },
-                        "& .MuiCollapse-root": {
-                            transition: "none"
-                        }
-                    },
-                }
-            },
-
-            MuiAccordionSummary: {
-                styleOverrides: {
-                    root: {
-                        minHeight: 0,
-                        flexDirection: "row-reverse",
-                        "&.Mui-expanded": {
-                            minHeight: 0,
-                        }
-                    },
-                    content: {
-                        margin: 0,
-                        "&.Mui-expanded": {
-                            margin: 0,
-                        }
-                    },
-                    expandIconWrapper: {
-                        ...appTheme.accordionIcon,
-                        transition: "none",
-                        "&.Mui-expanded": {
-                            margin: 0,
-                            transform: "rotate(90deg)",
-                        },
-                        "& .MuiSvgIcon-root": {
-                            fontSize: "0.75rem"
-                        }
-                    }
-                }
-            },
-
-            MuiAccordionDetails: {
-                styleOverrides: {
-                    root: {
-                        padding: "4px 25px"
-                    },
-                }
-            },
-
-            MuiTabs: {
-                styleOverrides: {
-                    root: {
-                        minHeight: 0
-                    },
-                    indicator: {
-                        ...appTheme.tabsIndicator,
-                        transition: "none"
-                    }
-                }
-            },
-
+            },    
             MuiTab: {
                 defaultProps: {
                     disableRipple: true,
@@ -529,136 +743,77 @@ const afterEffects = (params?: {
                 },
                 styleOverrides: {
                     root: {
-                        ...appTheme.tab,
                         minHeight: 0,
                         padding: "4px 6px",
+                        ...elementTheme.tab,
                         "&.Mui-selected": {
-                            ...appTheme.tabSelected,
+                            ...elementTheme.tabSelected,
                         }
                     },
                 }
             },
-
-            MuiTooltip: {
+            MuiTabs: {
                 styleOverrides: {
-                    tooltip: {
-                        backgroundColor: "#454545"
+                    root: {
+                        minHeight: 0
+                    },
+                    indicator: {
+                        transition: "none",
+                        ...elementTheme.tabsIndicator,
                     }
                 }
             },
-
-            MuiDrawer: {
-                styleOverrides: {
-                    paper: {
-                        padding: "8px",
-                        gap: "16px"
-                    }
-                }
-            },
-
-            MuiDialog: {
-
-            },
-            MuiDialogContent: {
+            MuiTextField: {
                 styleOverrides: {
                     root: ({ ownerState }) => ({
-                        ...appTheme.surface,
-                        ...(ownerState.dividers && {
-                            borderTopColor: appTheme.divider.backgroundColor,
-                            borderBottomColor: appTheme.divider.backgroundColor
+                        "& .MuiInputLabel-root": {
+                            ...elementTheme.textFieldLabel
+                        },
+                        "& .MuiInputLabel-root.Mui-focused": {
+                            ...(!ownerState.InputProps?.readOnly && {
+                                ...elementTheme.textFieldLabelFocused
+                            })
+                        },
+                        "& .MuiInputLabel-root.Mui-disabled": {
+                            ...elementTheme.textFieldLabelDisabled
+                        },
+                        ...(ownerState.variant === "standard" && {
+                            "& .MuiInputLabel-root.Mui-focused": {
+                                ...elementTheme.textFieldLabel
+                            }
                         })
                     })
                 }
             },
-            MuiDialogContentText: {
+            MuiTooltip: {
                 styleOverrides: {
-                    root: {
-                        ...appTheme.surface
+                    tooltip: {
+                        ...elementTheme.tooltip
                     }
                 }
             },
-
-            MuiAlert: {
+            MuiToggleButton: {
+                defaultProps: {
+                    disableRipple: true,
+                    disableFocusRipple: true,
+                    disableTouchRipple: true,
+                },
                 styleOverrides: {
-                    standard: {
-                        ...appTheme.surface
-                    },
-                    standardSuccess: {
-                        ...appTheme.alertSuccess
-                    },
-                    standardError: {
-                        ...appTheme.alertError
-                    },
-                    outlined: {
-                        ...appTheme.alertInfoOutlined
-                    },
-                    outlinedSuccess: {
-                        ...appTheme.alertSuccessOutlined
-                    },
-                    outlinedError: {
-                        ...appTheme.alertErrorOutlined
-                    },
-                    filled: {
-                        ...appTheme.alertInfoFilled
-                    },
-                    filledSuccess: {
-                        ...appTheme.alertSuccessFilled
-                    },
-                    filledError: {
-                        ...appTheme.alertErrorFilled
-                    },
-                    icon: ({ ownerState }) => ({
-                        "& .MuiSvgIcon-root": {
-                            ...(ownerState.severity === "info" && {
-                                ...(ownerState.variant === "standard" && {
-                                    color: appTheme.alertInfo.color
-                                }),
-                                ...(ownerState.variant === "filled" && {
-                                    color: appTheme.alertInfoFilled.color
-                                }),
-                                ...(ownerState.variant === "outlined" && {
-                                    color: appTheme.alertInfoOutlined.color
-                                })
-                            }),
-                            ...(ownerState.severity === "success" && {
-                                ...(ownerState.variant === "standard" && {
-                                    color: appTheme.alertSuccess.color
-                                }),
-                                ...(ownerState.variant === "filled" && {
-                                    color: appTheme.alertSuccessFilled.color
-                                }),
-                                ...(ownerState.variant === "outlined" && {
-                                    color: appTheme.alertSuccessOutlined.color
-                                })
-                            }),
-                            ...(ownerState.severity === "error" && {
-                                ...(ownerState.variant === "standard" && {
-                                    color: appTheme.alertError.color
-                                }),
-                                ...(ownerState.variant === "filled" && {
-                                    color: appTheme.alertErrorFilled.color
-                                }),
-                                ...(ownerState.variant === "outlined" && {
-                                    color: appTheme.alertErrorOutlined.color
-                                })
-                            })
+                    root: {
+                        padding: "3px",
+                        borderColor: "transparent",
+                        ...elementTheme.toggleButton,
+                        "&.Mui-selected": {
+                            borderStyle: "solid",
+                            borderWidth: "1px",
+                            ...elementTheme.toggleButtonSelected,
+                        },
+                        "&.Mui-selected *": {
+                            ...elementTheme.toggleButtonSelected
                         }
-                        
-                    })
-                }
-            },
-
-            MuiAlertTitle: {
-
-            },
-
-            MuiSvgIcon: {
-                styleOverrides: {
-                    root: {
-                        color: afterEffectsAppColor.icon
                     }
                 }
-            }
+            },
         }
     });
 }

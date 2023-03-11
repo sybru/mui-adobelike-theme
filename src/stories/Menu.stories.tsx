@@ -21,7 +21,7 @@ const Template: ComponentStory<typeof Menu> = (args) => {
                 <MenuItem selected>List item 2</MenuItem>
                 <MenuItem>List item 3</MenuItem>
                 <MenuItem>List item 4</MenuItem>
-                <MenuItem selected>List item 5</MenuItem>
+                <MenuItem>List item 5</MenuItem>
             </Menu>
         </Paper>
     )

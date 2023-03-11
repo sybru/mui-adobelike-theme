@@ -11,12 +11,21 @@ export default {
 const Template: ComponentStory<typeof Drawer> = (args) => (
     <Paper sx={{ height: "100%", padding: "8px", display: "flex", flexDirection: "column" }}>
         <Drawer anchor="left" open>
-            <Button variant="adobe-primary-contained">adobe-primary</Button>
-            <Button variant="adobe-danger-contained">adobe-danger</Button>
-            <Button variant="adobe-primary-outlined">adobe-primary</Button>
-            <Button variant="adobe-danger-outlined">adobe-danger</Button>
+            <Button variant="contained" color="adobe-primary">adobe-primary</Button>
+            <Button variant="contained" color="adobe-danger">adobe-danger</Button>
+            <Button variant="outlined" color="adobe-primary">adobe-primary</Button>
+            <Button variant="outlined" color="adobe-danger">adobe-danger</Button>
+            <Button variant="text" color="adobe-primary">adobe-primary</Button>
+            <Button variant="text" color="adobe-danger">adobe-danger</Button>
             <Button variant="adobe-cta">adobe-cta</Button>
-            <Button disabled>disabled</Button>
+
+            <Button variant="contained" color="adobe-primary" disabled>adobe-primary</Button>
+            <Button variant="contained" color="adobe-danger" disabled>adobe-danger</Button>
+            <Button variant="outlined" color="adobe-primary" disabled>adobe-primary</Button>
+            <Button variant="outlined" color="adobe-danger" disabled>adobe-danger</Button>
+            <Button variant="text" color="adobe-primary" disabled>adobe-primary</Button>
+            <Button variant="text" color="adobe-danger" disabled>adobe-danger</Button>
+            <Button variant="adobe-cta" disabled>adobe-cta</Button>
         </Drawer>
     </Paper>
     
