@@ -2,8 +2,8 @@
 	"name": "mui-adobelike-theme",
 	"version": "0.0.4",
 	"description": "",
-	"main": "./dist/0.0.3/index.js",
-	"types": "./dist/0.0.3/index.d.ts",
+	"main": "./dist/0.0.4/index.js",
+	"types": "./dist/0.0.4/index.d.ts",
 	"private": true,
 	"scripts": {
 		"build": "ts-node scripts/build",

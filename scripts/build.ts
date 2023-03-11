@@ -38,13 +38,7 @@ const config: Configuration = {
 
     target: ["web", "es2015"],
 
-    externals: {
-        "react": "react",
-        "createTheme": "@mui/material/styles/createTheme",
-        "PaletteColor": "@mui/material/styles",
-        "CSSObject": "@mui/styled-engine",
-        "deepmerge": "@mui/utils/deepmerge"
-    }
+    externals: /^(react|@mui\/)/i,
 }
 
 const exists = (path: string) => fs.promises.access(path).then(() => true).catch(() => false);
