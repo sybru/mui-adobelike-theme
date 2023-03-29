@@ -1,0 +1,8 @@
+{
+	"name": "@mui-adobelike-theme",
+	"version": "0.0.5",
+	"author": "sybru",
+	"license": "MIT",
+	"main": "index.js",
+	"types": "index.d.ts"
+}
