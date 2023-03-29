@@ -64,7 +64,7 @@ export type AfterEffectsAppTheme = Partial<{
     }>;
 }>;
 
-export const DefaultAfterEffectsAppTheme: AfterEffectsAppTheme = {
+export const afterEffectsAppTheme: AfterEffectsAppTheme = {
     surface: {
         standard:       "#272727",
         light:          "#454545",
@@ -530,7 +530,7 @@ export const afterEffectsElementTheme = (options?: {
     appTheme?: AfterEffectsAppTheme;
     elementTheme?: AfterEffectsElementTheme;
 }) => {
-    const _appTheme = deepmerge<AfterEffectsAppTheme>(DefaultAfterEffectsAppTheme, options?.appTheme)
+    const _appTheme = deepmerge<AfterEffectsAppTheme>(afterEffectsAppTheme, options?.appTheme);
     const _elementTheme = mergeElementTheme(_appTheme);
     return {
         appTheme: _appTheme,

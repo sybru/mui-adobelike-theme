@@ -1,6 +1,6 @@
 {
 	"name": "mui-adobelike-theme",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"description": "",
 	"main": "./dist/0.0.4/index.js",
 	"types": "./dist/0.0.4/index.d.ts",
