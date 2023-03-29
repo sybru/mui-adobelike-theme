@@ -12,7 +12,7 @@ export default {
 const Template: ComponentStory<typeof Tooltip> = (args) => (
     <Paper sx={{ height: "400px", padding: "8px", display: "flex", flexDirection: "column", gap: "16px"}}>
         <Tooltip open title="Primary Button">
-            <Button variant="adobe-primary-contained">adobe-primary</Button>
+            <Button color="adobe-primary" variant="contained">adobe-primary</Button>
         </Tooltip>
     </Paper>
     

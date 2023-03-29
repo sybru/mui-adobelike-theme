@@ -2,8 +2,9 @@ import { useMemo } from 'react'
 import createTheme from '@mui/material/styles/createTheme'
 import { PaletteColor } from '@mui/material/styles'
 import { afterEffectsElementTheme } from './theme'
-export type { AfterEffectsAppTheme, AfterEffectsElementTheme } from './theme'
+export { afterEffectsAppTheme } from './theme'
 export { afterEffectsElementTheme }
+export type { AfterEffectsAppTheme, AfterEffectsElementTheme } from './theme'
 
 declare module "@mui/material/styles" {
     interface Palette {
