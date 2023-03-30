@@ -1,1 +1,1 @@
-export { afterEffectsTheme, useAfterEffectsTheme } from './after-effects';
+export { afterEffectsAppTheme, afterEffectsTheme, useAfterEffectsTheme } from './after-effects';
